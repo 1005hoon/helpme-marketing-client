@@ -1,6 +1,5 @@
+import User from "../model/User";
 import HttpClient from "../networks/http-client";
-
-const mockUser = {};
 
 export default class AuthService {
 	http: HttpClient;
@@ -9,14 +8,14 @@ export default class AuthService {
 	}
 
 	async me() {
-		return null;
+		return this.http.request<User>("GET", "/auth/me");
 	}
 
 	async logIn() {
-		return mockUser;
+		return this.http.request<User>("POST", "/auth/login");
 	}
 
 	async logOut() {
-		return null;
+		return this.http.request<null>("POST", "/auth/logout");
 	}
 }
