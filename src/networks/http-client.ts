@@ -10,20 +10,23 @@ export default class HttpClient {
 		this.authErrorEventBus = authErrorEventBus;
 	}
 
-	async request<T>(method: Method, url: string, params?: any, data?: any) {
+	async request<T>(method: Method, url: string, params?: any, data?: any): Promise<T | undefined> {
 		try {
 			const res = await this.instance.request<T>({ method, url, params, data });
 			return res.data;
 		} catch (e) {
 			const error = this.parseAxiosError(e as AxiosError);
-			return this.authErrorEventBus.notify(error);
+			this.authErrorEventBus.notify(error);
+			return undefined;
 		}
 	}
 
 	parseAxiosError(e: AxiosError) {
 		let message = "";
 
-		if (e.response) {
+		if (e.message) {
+			message = e.message;
+		} else if (e.response) {
 			// Request made and server responded
 			message = e.response.data as string;
 		} else if (e.request) {
