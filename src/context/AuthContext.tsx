@@ -1,8 +1,7 @@
-import { createContext, useCallback, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import User from "../model/User";
 import LoginPage from "../pages/auth/LoginPage";
 import AuthService from "../services/auth.service";
-
-class User {}
 
 type AuthState = { user: User | undefined; logIn: () => Promise<void>; logOut: () => Promise<void> };
 const AuthContext = createContext<AuthState>({ user: undefined, logIn: async () => {}, logOut: async () => {} });
@@ -20,7 +19,7 @@ export function AuthProvider({
 
 	useEffect(() => {
 		authErrorEventBus.listen((e: Error) => {
-			console.error(e);
+			console.error(e.message);
 			setUser(undefined);
 		});
 	}, [authErrorEventBus]);
@@ -28,12 +27,6 @@ export function AuthProvider({
 	const isLoggedIn = useCallback(async () => {
 		try {
 			const user = await authService.me();
-
-			if (!user) {
-				setUser(undefined);
-				return;
-			}
-
 			setUser(user);
 		} catch (error) {
 			console.error(error);
@@ -68,6 +61,7 @@ export function AuthProvider({
 }
 
 export default AuthContext;
+export const useAuth = () => useContext(AuthContext);
 
 export class AuthErrorEventBus {
 	cb!: (e: Error) => void;
