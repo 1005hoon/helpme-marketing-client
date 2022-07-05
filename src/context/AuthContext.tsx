@@ -3,8 +3,18 @@ import User from "../model/User";
 import LoginPage from "../pages/auth/LoginPage";
 import AuthService from "../services/auth.service";
 
-type AuthState = { user: User | undefined; logIn: () => Promise<void>; logOut: () => Promise<void> };
-const AuthContext = createContext<AuthState>({ user: undefined, logIn: async () => {}, logOut: async () => {} });
+type AuthState = {
+	user: User | undefined;
+	logIn: () => Promise<void>;
+	logOut: () => Promise<void>;
+	getAuthToken: () => void;
+};
+const AuthContext = createContext<AuthState>({
+	user: undefined,
+	logIn: async () => {},
+	logOut: async () => {},
+	getAuthToken: () => {},
+});
 
 export function AuthProvider({
 	authService,
@@ -33,6 +43,10 @@ export function AuthProvider({
 		}
 	}, [authService]);
 
+	const getAuthToken = useCallback(() => {
+		authService.getAuthToken();
+	}, [authService]);
+
 	useEffect(() => {
 		isLoggedIn();
 	}, [isLoggedIn]);
@@ -55,7 +69,7 @@ export function AuthProvider({
 		}
 	}, [authService]);
 
-	const context = useMemo(() => ({ user, logIn, logOut }), [user, logIn, logOut]);
+	const context = useMemo(() => ({ user, logIn, logOut, getAuthToken }), [user, logIn, logOut, getAuthToken]);
 
 	return <AuthContext.Provider value={context}>{user ? children : <LoginPage />}</AuthContext.Provider>;
 }

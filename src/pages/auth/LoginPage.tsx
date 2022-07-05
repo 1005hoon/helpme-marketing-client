@@ -1,14 +1,21 @@
 import React from "react";
+import LoginForm from "../../components/auth/login-form";
+import { useAuth } from "../../context/AuthContext";
 
 interface LoginPageProps {
 	children?: React.ReactNode;
 }
 
 const LoginPage: React.FC<LoginPageProps> = (props) => {
+	const { getAuthToken } = useAuth();
+	const onLogin = async () => {
+		getAuthToken();
+	};
+
 	return (
-		<div>
-			<h1>Login Page</h1>
-		</div>
+		<>
+			<LoginForm onLogin={onLogin} />
+		</>
 	);
 };
 
