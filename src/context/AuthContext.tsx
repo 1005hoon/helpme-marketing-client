@@ -45,7 +45,7 @@ export function AuthProvider({
 		} catch (error) {
 			console.error(error);
 		}
-	}, [authService]);
+	}, [authService, navigate]);
 
 	const getAuthToken = useCallback(() => {
 		authService.getAuthToken();
@@ -81,7 +81,7 @@ export function AuthProvider({
 		if (!hash) {
 			return;
 		}
-		console.log(hash);
+
 		const access_token = hash.split("&")[0].split("=")[1];
 		logIn(access_token);
 	}, [location, logIn]);

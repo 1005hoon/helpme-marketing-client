@@ -15,14 +15,14 @@ const authService = new AuthService(httpClient);
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
-	<React.StrictMode>
+	<>
 		<GlobalStyles />
 		<BrowserRouter>
 			<AuthProvider authErrorEventBus={authErrorEventBus} authService={authService}>
 				<App />
 			</AuthProvider>
 		</BrowserRouter>
-	</React.StrictMode>
+	</>
 );
 
 // If you want to start measuring performance in your app, pass a function
