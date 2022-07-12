@@ -145,6 +145,10 @@ const RESET = css`
 const GlobalStyles = createGlobalStyle`
     ${RESET}
 
+	* {
+		box-sizing: border-box
+	}
+	
     body { 
         font-family: 'Noto Sans KR', sans-serif;
 		color: #333
