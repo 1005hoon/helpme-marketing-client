@@ -10,6 +10,7 @@ export default class AuthService {
 	getAuthToken() {
 		const OAUTH2_ENDPOINT = process.env.REACT_APP_GOOGLE_OAUTH_ENDPOINTS;
 
+		/** Sending request is prohibited by Google by cors */
 		const form = document.createElement("form");
 		form.setAttribute("method", "GET");
 		form.setAttribute("action", OAUTH2_ENDPOINT);
@@ -45,8 +46,8 @@ export default class AuthService {
 		return this.http.request<User>("GET", "/auth/me");
 	}
 
-	async logIn() {
-		return this.http.request<User>("POST", "/auth/login");
+	async logIn(token: string) {
+		return this.http.request<User>("POST", "/auth/login", {}, { token });
 	}
 
 	async logOut() {

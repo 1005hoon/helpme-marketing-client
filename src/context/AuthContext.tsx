@@ -1,17 +1,18 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import User from "../model/User";
 import LoginPage from "../pages/auth/LoginPage";
 import AuthService from "../services/auth.service";
 
 type AuthState = {
 	user: User | undefined;
-	logIn: () => Promise<void>;
+	logIn: (accessToken: string) => Promise<void>;
 	logOut: () => Promise<void>;
 	getAuthToken: () => void;
 };
 const AuthContext = createContext<AuthState>({
 	user: undefined,
-	logIn: async () => {},
+	logIn: async (accessToken: string) => {},
 	logOut: async () => {},
 	getAuthToken: () => {},
 });
@@ -26,6 +27,7 @@ export function AuthProvider({
 	children: React.ReactNode;
 }) {
 	const [user, setUser] = useState<User | undefined>(undefined);
+	const location = useLocation();
 
 	useEffect(() => {
 		authErrorEventBus.listen((e: Error) => {
@@ -51,14 +53,17 @@ export function AuthProvider({
 		isLoggedIn();
 	}, [isLoggedIn]);
 
-	const logIn = useCallback(async () => {
-		try {
-			const user = await authService.logIn();
-			setUser(user);
-		} catch (error) {
-			console.error(error);
-		}
-	}, [authService]);
+	const logIn = useCallback(
+		async (accessToken: string) => {
+			try {
+				const user = await authService.logIn(accessToken);
+				setUser(user);
+			} catch (error) {
+				console.error(error);
+			}
+		},
+		[authService]
+	);
 
 	const logOut = useCallback(async () => {
 		try {
@@ -68,6 +73,16 @@ export function AuthProvider({
 			console.error(error);
 		}
 	}, [authService]);
+
+	useEffect(() => {
+		const hash = location.hash;
+		if (!hash) {
+			return;
+		}
+		console.log(hash);
+		const access_token = hash.split("&")[0].split("=")[1];
+		logIn(access_token);
+	}, [location, logIn]);
 
 	const context = useMemo(() => ({ user, logIn, logOut, getAuthToken }), [user, logIn, logOut, getAuthToken]);
 

@@ -23,7 +23,7 @@ describe("AuthService", () => {
 
 	describe("logIn()", () => {
 		it("should send POST request to /auth/login", async () => {
-			await authService.logIn();
+			await authService.logIn("test_token");
 			expect(httpClient.request).toHaveBeenCalledWith("POST", "/auth/login");
 		});
 	});

@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
 import App from "./app/App";
 import GlobalStyles from "./app/GlobalStyles";
@@ -16,9 +17,11 @@ const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
 	<React.StrictMode>
 		<GlobalStyles />
-		<AuthProvider authErrorEventBus={authErrorEventBus} authService={authService}>
-			<App />
-		</AuthProvider>
+		<BrowserRouter>
+			<AuthProvider authErrorEventBus={authErrorEventBus} authService={authService}>
+				<App />
+			</AuthProvider>
+		</BrowserRouter>
 	</React.StrictMode>
 );
 

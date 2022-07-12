@@ -6,5 +6,4 @@ Help Me Marketing Dashboard Client for better visualizing marketing and business
 
 -   React / TypeScript
 -   Styled Components
--   GraphQL
 -   Jest
