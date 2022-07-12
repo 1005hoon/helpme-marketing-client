@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import User from "../model/User";
 import LoginPage from "../pages/auth/LoginPage";
 import AuthService from "../services/auth.service";
@@ -28,6 +28,7 @@ export function AuthProvider({
 }) {
 	const [user, setUser] = useState<User | undefined>(undefined);
 	const location = useLocation();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		authErrorEventBus.listen((e: Error) => {
@@ -40,6 +41,7 @@ export function AuthProvider({
 		try {
 			const user = await authService.me();
 			setUser(user);
+			navigate("/");
 		} catch (error) {
 			console.error(error);
 		}

@@ -47,7 +47,7 @@ export default class AuthService {
 	}
 
 	async logIn(token: string) {
-		return this.http.request<User>("POST", "/auth/login", {}, { token });
+		return this.http.request<User>("POST", "/auth/google", {}, { token });
 	}
 
 	async logOut() {
